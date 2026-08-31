@@ -1,7 +1,10 @@
 #!/usr/bin/env sh
 set -eu
 
-ROOT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)
+# All public harness scripts live in the repository root. When this file is
+# sourced, POSIX sh keeps $0 pointing at the calling script, so its directory is
+# the repository root.
+ROOT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
 log() {
   printf '\n[%s] %s\n' "campus-meow" "$*"
@@ -13,4 +16,3 @@ require_command() {
     exit 1
   fi
 }
-
