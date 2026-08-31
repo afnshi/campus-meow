@@ -68,6 +68,6 @@ keys ending in `.pub` may be shared with a server administrator.
 
 ## Deployment
 
-Server deployment is intentionally deferred. `deploy.sh` validates the local
-release configuration but refuses to deploy until a production compose file and
-explicit deployment target are supplied.
+The shared-server production configuration is documented in
+`docs/deployment.md`. `deploy.sh` is scoped to the unique
+`campusmeow-zyf2045` Compose project and never edits the shared Nginx service.
