@@ -1,0 +1,36 @@
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+  application:
+    name: campus-meow-api
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:campus_meow}?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: ${MYSQL_USER:campus_meow}
+    password: ${MYSQL_PASSWORD:campus-meow-local}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  data:
+    mongodb:
+      uri: mongodb://${MONGO_USER:campus_meow}:${MONGO_PASSWORD:campus-meow-local}@${MONGO_HOST:localhost}:${MONGO_PORT:27017}/${MONGO_DATABASE:campus_meow}?authSource=admin
+  jackson:
+    default-property-inclusion: non_null
+server:
+  port: 8080
+  error:
+    include-message: never
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+app:
+  jwt:
+    secret: ${JWT_SECRET:local-development-secret-change-me-now}
+    ttl-seconds: ${JWT_TTL:3600}
+

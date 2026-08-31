@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "CampusMeow - Android",
+      "request": "launch",
+      "type": "dart",
+      "program": "apps/flutter_client/lib/main.dart"
+    },
+    {
+      "name": "CampusMeow - Windows",
+      "request": "launch",
+      "type": "dart",
+      "program": "apps/flutter_client/lib/main.dart",
+      "deviceId": "windows"
+    },
+    {
+      "name": "CampusMeow - Web",
+      "request": "launch",
+      "type": "dart",
+      "program": "apps/flutter_client/lib/main.dart",
+      "deviceId": "chrome"
+    }
+  ]
+}

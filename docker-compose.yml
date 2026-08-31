@@ -1,0 +1,84 @@
+name: campus-meow
+
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-campus_meow}
+      MYSQL_USER: ${MYSQL_USER:-campus_meow}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-campus_meow-local}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-campus-meow-root-local}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks: [backend]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-campus-meow-root-local}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    mem_limit: 512m
+    cpus: 1.0
+
+  mongodb:
+    image: mongo:8
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE:-campus_meow}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-campus_meow}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-campus-meow-local}
+    volumes:
+      - mongo-data:/data/db
+    networks: [backend]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    mem_limit: 512m
+    cpus: 1.0
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--maxmemory", "128mb", "--maxmemory-policy", "allkeys-lru", "--save", ""]
+    networks: [backend]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    mem_limit: 192m
+    cpus: 0.5
+
+  api:
+    build:
+      context: ./apps/api
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      MYSQL_HOST: mysql
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-campus_meow}
+      MYSQL_USER: ${MYSQL_USER:-campus_meow}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-campus-meow-local}
+      MONGO_HOST: mongodb
+      MONGO_DATABASE: ${MONGO_DATABASE:-campus_meow}
+      MONGO_USER: ${MONGO_USER:-campus_meow}
+      MONGO_PASSWORD: ${MONGO_PASSWORD:-campus-meow-local}
+      JWT_SECRET: ${JWT_SECRET:-local-development-secret-change-me-now}
+      JWT_TTL: ${JWT_TTL:-3600}
+    depends_on:
+      mysql: {condition: service_healthy}
+      mongodb: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    ports:
+      - "127.0.0.1:8080:8080"
+    networks: [backend]
+    mem_limit: 512m
+    cpus: 1.0
+    restart: unless-stopped
+
+networks:
+  backend:
+    name: campus-meow-backend
+
+volumes:
+  mysql-data:
+  mongo-data:
+
