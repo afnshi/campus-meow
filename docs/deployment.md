@@ -14,6 +14,11 @@ application and the shared server has limited available memory. MySQL and
 MongoDB are reachable only through loopback ports and must be managed through
 an SSH tunnel.
 
+The runtime memory budget remains 1 GiB in total: 320 MiB for the API, 256 MiB
+for MySQL, and 448 MiB for MongoDB. MongoDB uses the minimum 0.256 GB
+WiredTiger cache and a longer authenticated health-check timeout so the cache,
+server process, and `mongosh` probe can coexist inside the container limit.
+
 ## First deployment
 
 ```sh
