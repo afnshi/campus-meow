@@ -68,6 +68,9 @@ keys ending in `.pub` may be shared with a server administrator.
 
 ## Deployment
 
-The shared-server production configuration is documented in
-`docs/deployment.md`. `deploy.sh` is scoped to the unique
-`campusmeow-zyf2045` Compose project and never edits the shared Nginx service.
+The Ubuntu deployment for `www.afnshi.cn` is documented in
+`docs/deployment.md`. Use `deploy/nginx/campusmeow.conf` with host Nginx.
+`deploy.sh` is scoped to the `campusmeow-zyf2045` Compose project and never
+edits Nginx. Build only Web with
+`API_BASE_URL=https://www.afnshi.cn/api/v1 sh build.sh web`;
+the generated files are placed in `dist/web`.
