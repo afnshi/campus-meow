@@ -53,6 +53,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     CorsConfigurationSource corsConfigurationSource() {
         var configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(List.of(
+            "https://www.afnshi.cn",
             "http://localhost:*",
             "http://127.0.0.1:*"
         ));
